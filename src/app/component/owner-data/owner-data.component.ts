@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Route, Router } from '@angular/router';
+import { Auth } from 'src/app/Model/auth';
+import { Post } from 'src/app/Model/post';
+import { AuthServiceService } from 'src/app/service/auth.service';
+import { PostService } from 'src/app/service/post.service';
 
 @Component({
   selector: 'app-owner-data',
@@ -7,21 +11,42 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./owner-data.component.css']
 })
 export class OwnerDataComponent implements OnInit {
+  isAdmin: boolean=false;
+  data: Post[]=[]
 
-  constructor() { }
+  constructor(
+    private authService: AuthServiceService,
+    private postService: PostService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.isAdmin=this.authService.isAdmin();
+    this.getData();
   }
-  data=[
-    {id:1,name:"Biscuit", quantity:200, CostPrice:28, SalePrice:35},
-    {id: 2, name:"Cookies", quantity:230, CostPrice:65, SalePrice:84}
-  ]
+  getData(){
+    this.postService.getAllData().subscribe({
+      next:(response: any)=>{
+        this.data=response;
+      },
+      error:(error:any)=>{
+        console.log(error);
+      },
+    });
+  }
+  update(id:number){
+    this.router.navigate(['/addItem', id]);
+  }
+  delete(id:number){
+    this.postService.delete(id).subscribe({
+      next:(response:any)=>{
+        console.log(response);
+        this.getData();
+      },
+      error: (error:any)=>{
+        console.log(error);
+      },
+    });
+  }
 
-  deleteData(id:number){
-    this.data=this.data.filter((d, index)=>d.id!=id);
-  }
-  
-  addNew(ag:any){
-    this.data.push(ag);
-  }
 }

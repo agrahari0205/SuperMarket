@@ -2,23 +2,29 @@
 <section class="register-block">
     <div class="container">
         <div class="row mt-5 justify-content-center">
-            <form class="col-4" (ngSubmit)="onSubmit()">
+            <form class="col-4" (ngSubmit)="register()" #registerForm="ngForm">
                 <div class="mb-3">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-control" [(ngModel)]="formData.name" name="name"/>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-control" [(ngModel)]="formData.email" name="email"/>
-                    <div id="emailHelp" class="form-text">
-                        We'll naver share your password with any one else.
+                    <label class="form-label">Username *</label>
+                    <input type="text" class="form-control" [(ngModel)]="auth.username" name="Username" #username="ngModel" required/>
+                    <div class="form-text text-danger" *ngIf="username.invalid">
+                        Your username is invalid.
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" class="form-control" [(ngModel)]="formData.password" name="password">
+                    <label class="form-label">Email Address *</label>
+                    <input type="email" class="form-control" [(ngModel)]="auth.email" name="email" #email="ngModel" required/>
+                    <div id="emailHelp" class="form-text">
+                        We'll naver share your password with any one else.
+                    </div>
+                    <div class="form-text text-danger" *ngIf="email.invalid">
+                        You have entered invalid Email ID.
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary mb-3" routerLink="/login">Register</button>
+                <div class="mb-3">
+                    <label class="form-label">Password *</label>
+                    <input type="password" class="form-control" [(ngModel)]="auth.password" name="password" #password="ngModel" required/>
+                </div>
+                <button type="submit" class="btn btn-primary mb-3" [disabled]="registerForm.invalid">Register</button>
                 <div class="form-group">
                     <p> Already have an account? please <a routerLink="/login">Login</a>Here.</p>
                 </div>

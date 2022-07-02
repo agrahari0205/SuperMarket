@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthServiceService } from 'src/app/service/auth-service.service';
+import { Router } from '@angular/router';
+import { Auth } from 'src/app/Model/auth';
+import { AuthServiceService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -7,23 +9,29 @@ import { AuthServiceService } from 'src/app/service/auth-service.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  formData={email:'', password:''};
-  errorMessage='';
+  auth: Auth= {
+    username:'',
+    email:'',
+    password: '',
+  };
 
-  constructor(private auth:AuthServiceService) {}
+  constructor(private authService : AuthServiceService, private router:Router) {}
 
   ngOnInit(): void { }
 
-  onSubmit(){
-    let userId=this.auth.login(this.formData.email, this.formData.password);
-    if(!userId){
-      this.errorMessage="Invalid Account!!"
-    }else{
-      this.errorMessage='';
-      this.auth.storageToken(userId);
-      this.auth.canAccess();
-    }
+  login(){
+    this.authService.login(this.auth).subscribe({
+      next:(response:any)=>{
+        console.log(response);
+        if(response.isLoggedIn){
+          localStorage.setItem('admin', response.admin);
+          localStorage.setItem('email', response.email);
+          this.router.navigate(['/data']);
+        }
+      },
+      error:(error:any)=>{
+        console.log(error);
+      },
+    });
   }
-  
-
 }

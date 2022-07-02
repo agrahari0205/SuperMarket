@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthServiceService } from 'src/app/service/auth-service.service';
+import { Auth } from 'src/app/Model/auth';
+import { AuthServiceService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -8,17 +9,25 @@ import { AuthServiceService } from 'src/app/service/auth-service.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  formData={name:'', email:'', password:''};
+  auth: Auth={
+    username:'',
+    email: '',
+    password: '',
+  }
 
-  constructor(private auth: AuthServiceService, private router: Router) { }
+  constructor(private authService: AuthServiceService, private router: Router) { }
 
   ngOnInit(): void {}
 
-  onSubmit(){
-    let userId= this.auth.register(this.formData.name, this.formData.email, this.formData.password);
-
-    if(userId){
-      this.router.navigate(['/login']);
-    }
+  register(){
+    this.authService.register(this.auth).subscribe({
+      next: (response:any)=>{
+        console.log(response);
+        this.router.navigate(['/login']);
+      },
+      error:(error)=>{
+        console.log(error);
+      },
+    });
   }
 }

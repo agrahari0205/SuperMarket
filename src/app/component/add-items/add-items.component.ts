@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
-import { data } from 'src/app/Model/data';
-import { AuthServiceService } from 'src/app/service/auth-service.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Post } from 'src/app/Model/post';
+import { PostService } from 'src/app/service/post.service';
 
 @Component({
   selector: 'app-add-items',
@@ -10,24 +9,49 @@ import { AuthServiceService } from 'src/app/service/auth-service.service';
   styleUrls: ['./add-items.component.css']
 })
 export class AddItemsComponent implements OnInit {
-  id!:number;
-  data={
-    id:0,
-    name:'',
-    quantity:'',
-    CostPrice:'',
-    SalePrice:'',
-    
-  }
-  constructor(private route:ActivatedRoute) { }
+  id!: number;
+  data: Post = {
+    id: 0,
+    name: '',
+    quantity: 0,
+    CostPrice: 0,
+    SalePrice: 0,
+  };
+
+  constructor(
+    private route: ActivatedRoute,
+    private postService: PostService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-    this.id=this.route.snapshot.params['id'];
-    
+    this.data.id = this.route.snapshot.params['id'];
+    this.postService.getData(this.data.id).subscribe({
+      next: (response: any) => {
+        this.data = response;
+      },
+    });
   }
+  AddData() {
+    if (this.data.id === 0) {
+      this.postService.save(this.data).subscribe({
+        next: (response: any) => {
+          console.log(response);
+          this.router.navigate(['/']);
+        },
+      });
+    } else {
+      this.postService.update(this.data).subscribe({
 
-  AddData(item:any){
-    
+        next: (response: any) => {
+          console.log(response);
+          this.router.navigate(['/']);
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+      });
+    }
   }
 
 }

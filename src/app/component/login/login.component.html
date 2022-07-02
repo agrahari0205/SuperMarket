@@ -1,39 +1,38 @@
 <app-navigation></app-navigation>
-<section class="register-block">
-  <div class="container">
-    <div class="row mt-5 justify-content-center">
-      <form class="col-4" novalidate (ngSubmit)="onSubmit()">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-8 my-5">
+      <h3>Login</h3>
+      <form class="col-4" (ngSubmit)="login()" #loginForm="ngForm">
         <div class="mb-3">
-          <label class="form-label">Email address</label>
+          <label class="form-label">Email</label>
           <input
             type="email"
             class="form-control"
-            [(ngModel)]="formData.email"
             name="email"
+            [(ngModel)]="auth.email"
+            #email="ngModel"
+            required
           />
-          <div id="emailHelp" class="form-text">
-            We'll never share your email with anyone else.
-          </div>
+          <small class="form-text text-danger">This is a required field.</small>
         </div>
         <div class="mb-3">
           <label class="form-label">Password</label>
           <input
             type="password"
             class="form-control"
-            [(ngModel)]="formData.password"
             name="password"
+            [(ngModel)]="auth.password"
+            #password="ngModel"
+            required
           />
+          <small class="form-text text-danger">This is a required field.</small>
         </div>
-        <div class="form-group">
-          <p class="text-danger" [innerText]="this.errorMessage"></p>
-        </div>
-        <button type="submit" class="btn btn-primary mb-3" routerLink="/profile">Login</button>
-        <div class="form-group">
-          <p>
-            Create new account? Please <a routerLink="/register">Register</a>
-          </p>
-        </div>
+        <p class="my-2">
+          Not having an account? Click <a routerLink="/register">here</a>
+        </p>
+        <button type="submit" class="w-100 btn btn-primary" [disabled]="loginForm.invalid">Login</button>
       </form>
     </div>
   </div>
-</section>
+</div>
