@@ -15,9 +15,9 @@
             <td>{{i+1}}</td>
             <td>{{ item.name }}</td>
             <td>{{ item.quantity }}</td>
-            <td>{{ item.CostPrice }}</td>
-            <td>{{ item.SalePrice }}</td>
-            <td>{{ item.SalePrice-item.CostPrice }}</td>
+            <td>{{ item.costPrice }}</td>
+            <td>{{ item.salePrice }}</td>
+            <td>{{ item.salePrice-item.costPrice }}</td>
             <td><button class="btn btn-success" routerLink="/addItems/{{item.id}}">Update</button></td>
             <td><button class="btn btn-danger" (click)="delete(item.id)">Delete</button></td>
         </tr>

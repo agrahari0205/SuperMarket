@@ -10,6 +10,7 @@ export class AuthServiceService {
   constructor(private http: HttpClient, private router:Router) {}
 
   login(auth:Auth){
+    console.log(auth);
     return this.http.post('http://localhost:9091/api/auth/login', auth);
   }
 

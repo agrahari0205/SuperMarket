@@ -14,8 +14,8 @@ export class AddItemsComponent implements OnInit {
     id: 0,
     name: '',
     quantity: 0,
-    CostPrice: 0,
-    SalePrice: 0,
+    costPrice: 0,
+    salePrice: 0,
   };
 
   constructor(
@@ -26,18 +26,20 @@ export class AddItemsComponent implements OnInit {
 
   ngOnInit(): void {
     this.data.id = this.route.snapshot.params['id'];
-    this.postService.getData(this.data.id).subscribe({
-      next: (response: any) => {
-        this.data = response;
-      },
-    });
+    if (this.data.id === 0 || this.data.id === undefined) {
+      this.postService.getData(this.data.id).subscribe({
+        next: (response: any) => {
+          this.data = response;
+        },
+      });
+    }
   }
   AddData() {
-    if (this.data.id === 0) {
+    if (this.data.id === 0 || this.data.id === undefined) {
       this.postService.save(this.data).subscribe({
         next: (response: any) => {
           console.log(response);
-          this.router.navigate(['/']);
+          this.router.navigate(['/data']);
         },
       });
     } else {
@@ -45,7 +47,7 @@ export class AddItemsComponent implements OnInit {
 
         next: (response: any) => {
           console.log(response);
-          this.router.navigate(['/']);
+          this.router.navigate(['/data']);
         },
         error: (error: any) => {
           console.log(error);

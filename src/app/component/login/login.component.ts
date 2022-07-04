@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
     email:'',
     password: '',
   };
+  error:String='';
 
   constructor(private authService : AuthServiceService, private router:Router) {}
 
@@ -23,9 +24,13 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.auth).subscribe({
       next:(response:any)=>{
         console.log(response);
-        if(response.isLoggedIn){
-          localStorage.setItem('admin', response.admin);
+        if(response===null || !response.success){
+          this.error='Invalid Credentials';
+          this.auth.email='';
+          this.auth.password='';
+        }else{
           localStorage.setItem('email', response.email);
+          localStorage.setItem('password', response.password);
           this.router.navigate(['/data']);
         }
       },
